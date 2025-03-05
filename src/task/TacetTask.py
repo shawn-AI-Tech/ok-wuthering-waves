@@ -11,7 +11,8 @@ class TacetTask(BaseCombatTask):
         self.description = "Farm selected Tacet Suppression until out of stamina, will use the backup stamina, you need to be able to teleport from the menu(F2)"
         self.name = "Tacet Suppression (Must explore first to be able to teleport)"
         default_config = {
-            'Which Tacet Suppression to Farm': 1  # starts with 1
+            'Which Tacet Suppression to Farm': 1,  # starts with 1
+            'Complete Drift Log': False
         }
         self.row_per_page = 5
         self.total_number = 10
@@ -34,7 +35,11 @@ class TacetTask(BaseCombatTask):
         total_used = 0
         while True:
             self.openF2Book()
-            self.click_relative(0.04, 0.27, after_sleep=1)
+            Complete = self.config.get('Complete Drift Log', False)
+            if not Complete:
+                self.click_relative(0.04, 0.37, after_sleep=1) # 0.27, 0.37
+            else:
+                self.click_relative(0.04, 0.27, after_sleep=1)
             current, back_up = self.get_stamina()
             if current + back_up < 60:
                 return self.not_enough_stamina()
