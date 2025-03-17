@@ -3,6 +3,8 @@ from pathlib import Path
 
 import numpy as np
 
+from ok import ConfigOption
+
 version = "v5.0.11"
 
 
@@ -45,12 +47,34 @@ def make_bottom_right_black(frame):
         return frame
 
 
+key_config_option = ConfigOption('Game Hotkey Config', {
+    'HotKey Verify': False,
+    'Echo Key': 'q',
+    'Liberation Key': 'r',
+    'Resonance Key': 'e',
+}, description='In Game Hotkey for Skills')
+
+pick_echo_config_option = ConfigOption('Pick Echo Config', {
+    'Use OCR': True
+}, config_description={
+    'Use OCR': 'Turn on if your CPU is Powerful for more accuracy'}, description='Turn on to enable auto pick echo')
+
+monthly_card_config_option = ConfigOption('Monthly Card Config', {
+    'Check Monthly Card': False,
+    'Monthly Card Time': 4
+}, description='Turn on to avoid interruption by monthly card when executing tasks', config_description={
+    'Check Monthly Card': 'Check for monthly card to avoid interruption of tasks',
+    'Monthly Card Time': 'Your computer\'s local time when the monthly card will popup, hour in (1-24)'
+})
+
+
 config = {
     'debug': False,  # Optional, default: False
     'use_gui': True,
     'config_folder': 'configs',
     'screenshot_processor': make_bottom_right_black,
     'gui_icon': 'icon.png',
+    'global_configs': [key_config_option, pick_echo_config_option, monthly_card_config_option],
     'ocr': {
         'lib': 'rapidocr_openvino'
     },
@@ -62,6 +86,7 @@ config = {
         'default_horizontal_variance': 0.002,
         'default_vertical_variance': 0.002,
         'default_threshold': 0.8,
+        'target_height': 540,
     },
     'windows': {  # required  when supporting windows game
         'exe': 'Client-Win64-Shipping.exe',
@@ -113,14 +138,14 @@ config = {
             'github': 'https://github.com/ok-oldking/ok-wuthering-waves',
             'discord': 'https://discord.gg/Sy6etyCRed',
             'share': 'Download OK-WW from https://github.com/ok-oldking/ok-wuthering-waves/releases/latest',
-            'faq': 'https://github.com/ok-oldking/ok-wuthering-waves#FAQ'
+            'faq': 'https://github.com/ok-oldking/ok-wuthering-waves/blob/master/README_en.md'
         },
         'zh_CN': {
             'github': 'https://github.com/ok-oldking/ok-wuthering-waves',
             'discord': 'https://discord.gg/Sy6etyCRed',
             'share': 'OK-WW 夸克网盘下载：https://pan.quark.cn/s/75b55ef72a34 GitHub下载: https://github.com/ok-oldking/ok-wuthering-waves/releases/latest',
             'qq_group': 'https://qm.qq.com/q/ufUCrCEq6A',
-            'faq': 'https://gitee.com/ok-olding/ok-wuthering-waves/blob/master/README_cn.md#%E5%87%BA%E7%8E%B0%E9%97%AE%E9%A2%98%E8%AF%B7%E6%A3%80%E6%9F%A5',
+            'faq': 'https://g-frfh1513.coding.net/public/ok-wuthering-waves/ok-wuthering-waves/git/files',
         },
     },
     'about': """

@@ -49,14 +49,11 @@ class FarmWorldBossTask(BaseCombatTask):
         self.config_type["Entrance Direction"] = {'type': "drop_down", 'options': ['Forward', 'Backward']}
         self.crownless_pos = (0.9, 0.4)
         self.icon = FluentIcon.GLOBE
+        self.add_exit_after_config()
 
     # not current in use because not stable, right now using one click to scroll down
 
     def run(self):
-        # self.click_relative(1136 / 2560, 0.222)  # 1
-        # self.click_relative(1136 / 2560, 0.272) #2
-        # self.click_relative(1136 / 2560, 0.321)  # 3
-        # return
 
         self.set_check_monthly_card()
         self.check_main()
@@ -77,15 +74,13 @@ class FarmWorldBossTask(BaseCombatTask):
                             in_combat = self.wait_until(self.in_combat, raise_if_not_found=False, time_out=10)
                             if not in_combat:  # try click again
                                 self.walk_until_f(raise_if_not_found=True, time_out=4)
-                        elif boss_name == 'Bell-Borne Geochelone':
-                            logger.info(f'sleep for the Bell-Borne model to appear')
-                            self.sleep(15)
                         elif boss_name == 'Lorelei':
                             if count % 6 < 3:
                                 self.change_time_to_night()
                         self.middle_click_relative(0.5, 0.5)
                         self.sleep(0.4)
-                        self.run_until(self.in_combat, 'w', time_out=15, running=True)
+                        self.run_until(self.in_combat, 'w', time_out=5, running=True)
+                        self.wait_until(self.in_combat, raise_if_not_found=True, time_out=120)
                         if boss_name == 'Sentry Construct':
                             logger.debug('Sentry Construct sleep')
                             self.sleep(5)
@@ -112,8 +107,8 @@ class FarmWorldBossTask(BaseCombatTask):
                             dropped = self.walk_find_echo()
                         self.incr_drop(dropped)
 
-            if count <= 2:
-                self.log_error('Must choose at least 3 Boss to Farm', notify=True)
+            if count < 2:
+                self.log_error('Must choose at least 2 Boss to Farm', notify=True)
                 return
 
     def change_time_to_night(self):
