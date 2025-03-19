@@ -24,7 +24,7 @@ class CombatCheck(BaseWWTask):
         self.boss_health_box = None
         self.boss_health = None
         self.out_of_combat_reason = ""
-        self.combat_check_interval = 1
+        self.combat_check_interval = 0.5
         self.last_in_realm_not_combat = 0
         self._last_liberation = 0
 
@@ -111,13 +111,6 @@ class CombatCheck(BaseWWTask):
                 self.last_combat_check = now
                 if self.has_target():
                     self.last_in_realm_not_combat = 0
-                    return self.log_time(now, 'target_enemy')
-                if self.last_in_realm_not_combat == 0 and self.in_realm():
-                    self.last_in_realm_not_combat = now
-                    logger.debug(f'in_realm multiple wave, try wait {now - self.last_in_realm_not_combat}')
-                    return True
-                elif now - self.last_in_realm_not_combat < 3 and self.in_realm():  # fix multiple waves in realm
-                    logger.debug(f'in_realm multiple wave, try wait {now - self.last_in_realm_not_combat}')
                     return True
                 if self.target_enemy(wait=True):
                     logger.debug(f'retarget enemy succeeded')
@@ -165,11 +158,16 @@ class CombatCheck(BaseWWTask):
         return True
 
     def has_target(self):
-        aim_percent = self.calculate_color_percentage(aim_color, self.get_box_by_name('box_target_enemy'))
-        # logger.debug(f'aim_percent {aim_percent}')
-        if aim_percent < 0.005 and self.has_long_actionbar_chars():
-            aim_percent = self.calculate_color_percentage(aim_color, self.get_box_by_name('box_target_enemy_long'))
-        if aim_percent > 0.005:
+        if self.has_long_actionbar_chars():
+            outer_box = 'box_target_enemy_long'
+            inner_box = 'box_target_enemy_long_inner'
+        else:
+            outer_box = 'box_target_enemy'
+            inner_box = 'box_target_enemy_inner'
+        aim_percent = self.calculate_color_percentage(aim_color, self.get_box_by_name(outer_box))
+        aim_inner_percent = self.calculate_color_percentage(aim_color, self.get_box_by_name(inner_box))
+        logger.debug(f'box_target_enemy yellow percent {aim_percent} {aim_inner_percent}')
+        if aim_percent - aim_inner_percent > 0.02:
             return True
 
     def has_long_actionbar_chars(self):
