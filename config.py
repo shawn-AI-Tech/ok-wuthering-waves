@@ -177,8 +177,9 @@ config = {
     ], 'trigger_tasks': [
         ["src.task.AutoCombatTask", "AutoCombatTask"],
         ["src.task.AutoPickTask", "AutoPickTask"],
+        ["src.task.AutoEnhanceEchoTask", "AutoEnhanceEchoTask"],
         ["src.task.SkipDialogTask", "AutoDialogTask"],
-        ["src.task.MouseResetTask", "MouseResetTask"],
         ["src.task.AutoLoginTask", "AutoLoginTask"],
-    ]
+        ["src.task.MouseResetTask", "MouseResetTask"],
+    ], 'scene': ["src.scene.WWScene", "WWScene"],
 }

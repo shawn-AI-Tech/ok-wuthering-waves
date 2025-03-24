@@ -184,7 +184,7 @@ class BaseWWTask(BaseTask):
             move = False
             down_time = 0.01
         else:
-            down_time = 0.16
+            down_time = 0.2
         return super().click(x, y, move_back, name, interval, move=move, down_time=down_time, after_sleep=after_sleep)
 
     def check_for_monthly_card(self):
@@ -231,7 +231,7 @@ class BaseWWTask(BaseTask):
         return True
 
     def get_stamina(self):
-        boxes = self.wait_ocr(0.49, 0.01, 0.92, 0.10, log=True, raise_if_not_found=True,
+        boxes = self.wait_ocr(0.49, 0.01, 0.92, 0.10, log=True, raise_if_not_found=False,
                               match=[number_re, stamina_re])
         if len(boxes) == 0:
             return -1, -1
